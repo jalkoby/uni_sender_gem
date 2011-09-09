@@ -31,7 +31,7 @@ If parameter are array, uni_sender will join contents by ","(comma), also proces
 
 Hash will decode to variables of 2 level, for example:
 
- :friend=>{:name=>'Роман', :car=>'BMW'}  will be friend[name]=%D0%A0%D0%BE%D0%BC%D0%B0%D0%BD&friend[car]=BMW
+ :friend=>\{:name=>'Роман', :car=>'BMW'\}  will be friend[name]=%D0%A0%D0%BE%D0%BC%D0%B0%D0%BD&friend[car]=BMW
 
 == Dependencies
 
@@ -41,5 +41,5 @@ Hash will decode to variables of 2 level, for example:
 
 For more information about actions and returned answers please visit:
 
-*{UniSender Api list}[http://unisender.com.ua/help/api]
+*  {UniSender Api list}[http://unisender.com.ua/help/api]
 
