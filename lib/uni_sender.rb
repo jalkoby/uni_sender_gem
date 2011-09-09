@@ -18,15 +18,6 @@ module UniSender
       end
     end
 
-    def subscribe(params)
-      params['request_ip'] ||= client_ip
-      return default_request('subscribe', params)
-    end
-
-    def client_ip
-      @client_ip || '0.0.0.0'
-    end
-
     def locale
       @locale || 'en'
     end
