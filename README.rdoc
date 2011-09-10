@@ -38,7 +38,7 @@ Hash will decode to variables of 2 level, for example:
 
 == Dependencies
 
-  That gem supports ruby 1.8+
+That gem supports ruby 1.8+
 
 == Wikis
 
