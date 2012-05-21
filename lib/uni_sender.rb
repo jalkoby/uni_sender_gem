@@ -1,6 +1,6 @@
 require "uni_sender/version"
 require 'uni_sender/camelize'
-require 'open-uri'
+require 'net/http'
 require 'json'
 
 module UniSender
@@ -52,11 +52,12 @@ module UniSender
         params = translate_params(params) if defined?('translate_params')
         params.merge!({'api_key'=>api_key, 'format'=>'json'})
         query = make_query(params)
-        JSON.parse(open("http://www.unisender.com/#{locale}/api/#{action}?#{query}").read)
+        url = URI("http://api.unisender.com/#{locale}/api/#{action}?#{query}")
+        JSON.parse(Net::HTTP.get(url))
       end
 
       def make_query(params)
-        params.map{|key, value| value.nil? ? "" : "#{key}=#{value}"}.join('&')
+        params.map{|key, value| value.nil? ? "" : "#{key}=#{value}"}.reject(&:empty?).join('&')
       end
 
   end
