@@ -3,8 +3,8 @@ require 'bundler/setup'
 
 Bundler.require(:default)
 
-require 'lib/uni_sender'
-require "spec/data_macros"
+require 'uni_sender'
+require "data_macros"
 
 RSpec.configure do |config|
 
