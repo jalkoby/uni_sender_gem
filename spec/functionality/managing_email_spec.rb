@@ -1,3 +1,4 @@
+#coding: utf-8
 require 'spec_helper'
 
 describe UniSender::Client do
@@ -10,6 +11,13 @@ describe UniSender::Client do
     answer['result']['message_id'].should be_an_kind_of(Numeric)
   end
 
+  it 'should create email template with long body' do
+    answer = test_client.create_email_message(:sender_name=>'Ivan Petrov', :sender_email=>'uni.sender.gem@gmail.com',
+    :subject=>'You need your stuff', :list_id=>available_list_ids.last, :lang=>'en',
+    :body=>"Hi there! Plz send sms with text: #{(0...20000).map{65.+(rand(25)).chr}.join}")
+    answer.should include('result')
+    answer['result']['message_id'].should be_an_kind_of(Numeric)
+  end
 
   it 'should create sms template by name' do
     answer = test_client.create_sms_message(:sender=>'Tester',
@@ -19,7 +27,7 @@ describe UniSender::Client do
   end
 
   it 'should create sms template by name' do
-    answer = test_client.create_sms_message(:sender=>'1 234 4567890',
+    answer = test_client.create_sms_message(:sender=>'12344567890',
     :list_id=>available_list_ids.last,:body=>"Просто смска with foo message")
     answer.should include('result')
     answer['result']['message_id'].should be_an_kind_of(Numeric)

@@ -52,12 +52,12 @@ module UniSender
         params = translate_params(params) if defined?('translate_params')
         params.merge!({'api_key'=>api_key, 'format'=>'json'})
         query = make_query(params)
-        url = URI("http://api.unisender.com/#{locale}/api/#{action}?#{query}")
-        JSON.parse(Net::HTTP.get(url))
+        url = URI("http://api.unisender.com/#{locale}/api/#{action}")
+        JSON.parse(Net::HTTP.post_form(url, query).body)
       end
 
       def make_query(params)
-        params.map{|key, value| value.nil? ? "" : "#{key}=#{value}"}.reject(&:empty?).join('&')
+        params.delete_if{|k,v| v.to_s.empty?}
       end
 
   end

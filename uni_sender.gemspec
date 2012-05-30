@@ -9,7 +9,6 @@ Gem::Specification.new do |gem|
   gem.homepage      = ""
 
   gem.add_development_dependency 'rspec'
-  gem.add_development_dependency 'ruby-debug'
   gem.add_dependency 'json'
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }

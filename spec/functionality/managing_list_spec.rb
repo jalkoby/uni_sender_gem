@@ -1,3 +1,4 @@
+#coding: utf-8
 require "spec_helper"
 
 describe UniSender::Client do
@@ -16,7 +17,7 @@ describe UniSender::Client do
   end
 
   it 'subscribe person to lists' do
-    answer = test_client.subscribe(:list_ids=>available_list_ids, :fields=>{:email=>'sam@parson.com', :phone=>'1 234 5678900',
+    answer = test_client.subscribe(:list_ids=>available_list_ids, :fields=>{:email=>'sam@parson.com', :phone=>'+72345678900',
      :twitter=>'sammy', :name=>'Сеня Парсон'})
     answer['result']['person_id'].should be_an_kind_of(Numeric)
   end
@@ -28,7 +29,7 @@ describe UniSender::Client do
   end
 
   it 'should unsubscribe from lists by phone' do
-    answer = test_client.unsubscribe(:contact_type=>'phone', :contact=>'+1 111 1111111')
+    answer = test_client.unsubscribe(:contact_type=>'phone', :contact=>'+11111111111')
     answer.should_not include('error')
     answer.should include('result')
   end
