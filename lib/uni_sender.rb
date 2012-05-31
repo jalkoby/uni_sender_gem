@@ -27,13 +27,9 @@ module UniSender
       def translate_params(params)
         params.inject({}) do |iparams, couple|
           iparams[couple.first] = case couple.last
-          when String
-            URI.encode(couple.last)
-          when Array
-            couple.last.map{|item| URI.encode(item.to_s)}.join(',')
           when Hash
             couple.last.each do |key, value|
-              iparams["#{couple.first}[#{key}]"] = URI.encode(value.to_s)
+              iparams["#{couple.first}[#{key}]"] = value.to_s
             end
             nil
           else
