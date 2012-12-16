@@ -30,7 +30,7 @@ module UniSender
 
     def prepare_action_name(source)
       parts = source.to_s.scan(/[[:alnum:]]+/)
-      camelize = lambda { |word, first| (first ? word[0].downcase : word[0].upcase) + word[1..-1] }
+      camelize = lambda { |word, first| (first ? word[0].chr.downcase : word[0].chr.upcase) + word[1..-1] }
 
       action_name = parts.each_with_index.map { |part, i| camelize.call(part, i.zero?) }.join('')
       raise NoAction if action_name.empty?
