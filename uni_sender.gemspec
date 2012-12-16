@@ -8,10 +8,9 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{See description}
   gem.homepage      = ""
 
+  gem.add_dependency 'rest-client', '~> 1.6.7'
+  gem.add_dependency 'json',        '~> 1.7.5'
   gem.add_development_dependency 'rspec'
-  gem.add_development_dependency 'guard-rspec'
-  gem.add_development_dependency 'ruby_gntp'
-  gem.add_dependency 'json'
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   gem.files         = `git ls-files`.split("\n")

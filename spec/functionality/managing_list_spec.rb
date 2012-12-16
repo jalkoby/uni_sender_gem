@@ -2,7 +2,6 @@
 require "spec_helper"
 
 describe UniSender::Client do
-
   it "should get collection of contact's list" do
     answer = test_client.getLists
     answer['result'].should have(3).items
@@ -40,4 +39,9 @@ describe UniSender::Client do
     #answer['result']['activated'].should == 2 falls because of rating or test mode
   end
 
+  it 'should import contacts' do
+    answer = test_client.import_contacts(:field_names => [ "email", "email_list_ids" ], :data => {0 => ["test@example.com", "123"] })
+    answer.should include('result')
+    answer['log'].should be_nil
+  end
 end

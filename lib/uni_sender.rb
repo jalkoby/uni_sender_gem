@@ -1,21 +1,20 @@
-require "uni_sender/version"
-require 'uni_sender/camelize'
-require 'net/http'
 require 'json'
+require 'rest-client'
 
 module UniSender
+  URL = 'http://api.unisender.com'
 
   class Client
+    attr_accessor :api_key, :locale
 
-    attr_accessor :api_key, :client_ip, :locale
-
-    def initialize(api_key, params={})
+    def initialize(api_key, locale = nil)
       self.api_key = api_key
-      params.each do |key, value|
-        if defined?("#{key}=")
-          self.send("#{key}=", value)
-        end
+
+      if locale.is_a?(Hash)
+        puts "Deprecated: Initializer changed. Use UniSender::Client.new(api_key, [locale])"
+        locale = locale[:locale]
       end
+      self.locale = locale if locale
     end
 
     def locale
@@ -24,42 +23,27 @@ module UniSender
 
     private
 
-      def translate_params(params)
-        params.inject({}) do |iparams, couple|
-          iparams[couple.first] = case couple.last
-          when String
-            URI.encode(couple.last)
-          when Array
-            couple.last.map{|item| URI.encode(item.to_s)}.join(',')
-          when Hash
-            couple.last.each do |key, value|
-              iparams["#{couple.first}[#{key}]"] = URI.encode(value.to_s)
-            end
-            nil
-          else
-            couple.last
-          end
-          iparams
-        end
-      end
+    def method_missing(method_name, *args, &block)
+      params = (args.first.is_a?(Hash) ? args.first : {} )
+      default_request(prepare_action_name(method_name), params)
+    end
 
-      def method_missing(undefined_action, *args, &block)
-        params = (args.first.is_a?(Hash) ? args.first : {} )
-        default_request(undefined_action.to_s.camelize(false), params)
-      end
+    def prepare_action_name(source)
+      parts = source.to_s.scan(/[[:alnum:]]+/)
+      camelize = lambda { |word, first| (first ? word[0].downcase : word[0].upcase) + word[1..-1] }
 
-      def default_request(action, params={})
-        params = translate_params(params) if defined?('translate_params')
-        params.merge!({'api_key'=>api_key, 'format'=>'json'})
-        query = make_query(params)
-        url = URI("http://api.unisender.com/#{locale}/api/#{action}")
-        JSON.parse(Net::HTTP.post_form(url, query).body)
-      end
+      action_name = parts.each_with_index.map { |part, i| camelize.call(part, i.zero?) }.join('')
+      raise NoAction if action_name.empty?
+      action_name
+    end
 
-      def make_query(params)
-        params.delete_if{|k,v| v.to_s.empty?}
-      end
-
+    def default_request(action, params)
+      params.merge!(:api_key => api_key, :format => :json)
+      url = "#{ URL }/#{ locale }/api/#{ action }"
+      JSON.parse RestClient.post(url, params)
+    end
   end
 
+  class NoAction < ::StandardError
+  end
 end
