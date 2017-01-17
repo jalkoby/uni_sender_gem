@@ -2,7 +2,7 @@ require 'json'
 require 'rest-client'
 
 module UniSender
-  URL = 'http://api.unisender.com'
+  URL = 'https://api.unisender.com'
 
   class Client
     attr_accessor :api_key, :locale
